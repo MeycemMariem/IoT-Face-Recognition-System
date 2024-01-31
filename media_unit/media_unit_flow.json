@@ -1,0 +1,148 @@
+[
+    {
+        "id": "8598d1c9.d6f54",
+        "type": "tab",
+        "label": "Flow @MEDIA_UNIT",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "2e64d260.4ed65e",
+        "type": "base64",
+        "z": "8598d1c9.d6f54",
+        "name": "Encode as Base64",
+        "action": "str",
+        "property": "payload",
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "2cca7beb.bff8b4",
+                "aa50255.bb8d5d8"
+            ]
+        ]
+    },
+    {
+        "id": "ffbf77f8.f532a8",
+        "type": "camera",
+        "z": "8598d1c9.d6f54",
+        "name": "Camera 1",
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "2e64d260.4ed65e"
+            ]
+        ]
+    },
+    {
+        "id": "5047150d.03955c",
+        "type": "mqtt out",
+        "z": "8598d1c9.d6f54",
+        "name": "",
+        "topic": "Cameras/Camera1",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5308ae93.0310f",
+        "x": 870,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "2cca7beb.bff8b4",
+        "type": "image viewer",
+        "z": "8598d1c9.d6f54",
+        "name": "",
+        "width": 160,
+        "data": "payload",
+        "dataType": "msg",
+        "active": true,
+        "x": 630,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aa50255.bb8d5d8",
+        "type": "function",
+        "z": "8598d1c9.d6f54",
+        "name": "Set message",
+        "func": "\nvar d = new Date();\n\nvar time_format = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + '@' + d.getHours() + ':' + d.getMinutes();\n\nmsg.payload = { \"image\": msg.payload, \"cam\": 1, \"timestamp\": time_format }\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 140,
+        "wires": [
+            [
+                "5047150d.03955c",
+                "b78e3e5c.0d972"
+            ]
+        ]
+    },
+    {
+        "id": "b78e3e5c.0d972",
+        "type": "debug",
+        "z": "8598d1c9.d6f54",
+        "name": "Msg Sent",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c9823ad2edac6e3f",
+        "type": "comment",
+        "z": "8598d1c9.d6f54",
+        "name": "Non Standard Nodes",
+        "info": "This flow contains three non-standard nodes that \nhave to be manually added to your palette.\n\n - **camera** node from **node-red-contrib-browser-utils**\n - **base64 converter** node from **node-red-node-base64**\n - **image viewer** node from **node-red-contrib-image-tools**",
+        "x": 380,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "5308ae93.0310f",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "172.19.0.4",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

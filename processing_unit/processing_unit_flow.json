@@ -1,0 +1,551 @@
+[
+    {
+        "id": "286fde6a.bd4c92",
+        "type": "tab",
+        "label": "Flow @PROCESSING_UNIT",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "64376185.7386d",
+        "type": "mqtt in",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "topic": "Cameras/#",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "5308ae93.0310f",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 80,
+        "y": 380,
+        "wires": [
+            [
+                "f25c53ee.e3f2e",
+                "45c1110f.8055e",
+                "5518fc84.cd0744",
+                "f49a1c8a.9ab1b"
+            ]
+        ]
+    },
+    {
+        "id": "b4677203.bd24",
+        "type": "file",
+        "z": "286fde6a.bd4c92",
+        "name": "save image to directory",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 850,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "479e3d9e.fd3134",
+        "type": "switch",
+        "z": "286fde6a.bd4c92",
+        "name": "is person",
+        "property": "payload.image.person",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1100,
+        "y": 380,
+        "wires": [
+            [
+                "573d3f5c.f2683"
+            ]
+        ]
+    },
+    {
+        "id": "46160fb1.b6b5d",
+        "type": "debug",
+        "z": "286fde6a.bd4c92",
+        "name": "Detection Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.person",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "dbf90654.272658",
+        "type": "inject",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 80,
+        "wires": [
+            [
+                "ce1c26a.dfc4ad8"
+            ]
+        ]
+    },
+    {
+        "id": "ce1c26a.dfc4ad8",
+        "type": "http request",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": "ignore",
+        "url": "https://source.unsplash.com/240x240/?portrait",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 410,
+        "y": 80,
+        "wires": [
+            [
+                "462bd1d7.f4eee",
+                "f49a1c8a.9ab1b"
+            ]
+        ]
+    },
+    {
+        "id": "3434eb4a.e8ded4",
+        "type": "comment",
+        "z": "286fde6a.bd4c92",
+        "name": "Test on dummy image",
+        "info": "",
+        "x": 240,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "ca114e2b.d1859",
+        "type": "debug",
+        "z": "286fde6a.bd4c92",
+        "name": "Person Id",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "f038f39.c4b151",
+        "type": "switch",
+        "z": "286fde6a.bd4c92",
+        "name": "Is this a valid photo",
+        "property": "payload.image[0]",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 830,
+        "y": 280,
+        "wires": [
+            [
+                "b4032e2f.768f9"
+            ]
+        ]
+    },
+    {
+        "id": "acc177d5.fb39f8",
+        "type": "change",
+        "z": "286fde6a.bd4c92",
+        "name": "Filename",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "'/home/pi/Desktop/processing_unit/taken_images/image_' &  payload.timestamp & '.jpeg'",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 280,
+        "wires": [
+            [
+                "b4677203.bd24",
+                "f038f39.c4b151"
+            ]
+        ]
+    },
+    {
+        "id": "f25c53ee.e3f2e",
+        "type": "function",
+        "z": "286fde6a.bd4c92",
+        "name": "Get Time",
+        "func": "msg.payload = msg.payload.timestamp;\nmsg.topic = \"Time\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 620,
+        "wires": [
+            [
+                "ef5da3ab.a50c6"
+            ]
+        ]
+    },
+    {
+        "id": "45c1110f.8055e",
+        "type": "function",
+        "z": "286fde6a.bd4c92",
+        "name": "Get Cam Number",
+        "func": "msg.payload = msg.payload.cam;\nmsg.topic = \"Cam\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 680,
+        "wires": [
+            [
+                "ef5da3ab.a50c6"
+            ]
+        ]
+    },
+    {
+        "id": "5518fc84.cd0744",
+        "type": "debug",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 330,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "ef5da3ab.a50c6",
+        "type": "join",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 950,
+        "y": 620,
+        "wires": [
+            [
+                "624cc33.da4a23c",
+                "e7a131a6.76552"
+            ]
+        ]
+    },
+    {
+        "id": "624cc33.da4a23c",
+        "type": "debug",
+        "z": "286fde6a.bd4c92",
+        "name": "Final Message",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "1792adc6.6d18d2",
+        "type": "function",
+        "z": "286fde6a.bd4c92",
+        "name": "Get ID",
+        "func": "msg.topic = \"ID\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 560,
+        "wires": [
+            [
+                "ef5da3ab.a50c6"
+            ]
+        ]
+    },
+    {
+        "id": "336d597.2845da6",
+        "type": "http request",
+        "z": "286fde6a.bd4c92",
+        "name": "Send Info",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "https://webhook.site/1548dcf7-35ca-49f2-a2a7-98624380db5d",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1360,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e7a131a6.76552",
+        "type": "change",
+        "z": "286fde6a.bd4c92",
+        "name": "Set headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers.content-type",
+                "pt": "msg",
+                "to": "application/json",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1150,
+        "y": 620,
+        "wires": [
+            [
+                "336d597.2845da6"
+            ]
+        ]
+    },
+    {
+        "id": "f49a1c8a.9ab1b",
+        "type": "base64",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "action": "",
+        "property": "payload.image",
+        "x": 320,
+        "y": 280,
+        "wires": [
+            [
+                "a158f916.548508",
+                "acc177d5.fb39f8"
+            ]
+        ]
+    },
+    {
+        "id": "462bd1d7.f4eee",
+        "type": "image viewer",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "width": 160,
+        "data": "payload",
+        "dataType": "msg",
+        "active": true,
+        "x": 770,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "99c5fa51.b0e528",
+        "type": "switch",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "s",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1250,
+        "y": 480,
+        "wires": [
+            [
+                "1792adc6.6d18d2"
+            ]
+        ]
+    },
+    {
+        "id": "b4032e2f.768f9",
+        "type": "tensorflowCoco",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "modelUrl": "http://localhost:1880/coco/model.json",
+        "scoreThreshold": 0.5,
+        "passthru": "true",
+        "lineColour": "magenta",
+        "x": 1030,
+        "y": 280,
+        "wires": [
+            [
+                "479e3d9e.fd3134",
+                "46160fb1.b6b5d"
+            ]
+        ]
+    },
+    {
+        "id": "573d3f5c.f2683",
+        "type": "bigexec",
+        "z": "286fde6a.bd4c92",
+        "name": "run Face Recognition script",
+        "command": "python3 process_image.py",
+        "commandArgs": "",
+        "minError": 1,
+        "minWarning": 1,
+        "cwd": "/home/pi/Desktop/processing_unit/processing_scripts",
+        "shell": true,
+        "extraArgumentProperty": "",
+        "envProperty": "",
+        "format": "utf8",
+        "limiter": true,
+        "payloadIs": "argument",
+        "x": 1020,
+        "y": 460,
+        "wires": [
+            [
+                "ca114e2b.d1859",
+                "99c5fa51.b0e528"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "a158f916.548508",
+        "type": "image",
+        "z": "286fde6a.bd4c92",
+        "name": "",
+        "width": 160,
+        "data": "payload.image",
+        "dataType": "msg",
+        "thumbnail": false,
+        "active": true,
+        "pass": false,
+        "outputs": 0,
+        "x": 580,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "b82e90dd290f5347",
+        "type": "comment",
+        "z": "286fde6a.bd4c92",
+        "name": "Non Standard Nodes",
+        "info": "This flow contains five non-standard nodes that \nhave to be manually added to your palette.\n\n - **base64 converter** node from **node-red-node-base64**\n - **image viewer** node from **node-red-contrib-image-tools**\n - **bigexec** node from ** node-red-contrib-bigexec**\n - **image viewer** node from **node-red-contrib-image-output**\n - **Tensorflow coco** node from **node-red-contrib-tfjs-coco-ssd**",
+        "x": 540,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "5308ae93.0310f",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "172.19.0.4",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

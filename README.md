@@ -37,10 +37,10 @@ IoT Face Recognition System
 │   └───media_unit_flow.json  
 ├───processing_unit  
 │   ├───processing_unit_flow.json  
-│   └───processing_scripts
-│       ├───faces_dataset
-│       ├───taken_images
-│       ├───process_image.py 
+│   └───processing_scripts  
+│       ├───faces_dataset  
+│       ├───taken_images  
+│       ├───process_image.py  
 │       └───train.py  
 └───README.md
 
@@ -78,9 +78,9 @@ IoT Face Recognition System
 │   └───media_unit_flow.json  
 ├───processing_unit  
 │   ├───processing_unit_flow.json  
-│   └───processing_scripts
-│       ├───faces_dataset
-│       ├───taken_images
-│       ├───process_image.py 
+│   └───processing_scripts  
+│       ├───faces_dataset  
+│       ├───taken_images  
+│       ├───process_image.py   
 │       └───train.py  
 └───README.md
